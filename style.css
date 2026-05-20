@@ -13,8 +13,8 @@
     --text-primary: #5A3D6A;
     --text-secondary: #8B6F9E;
     --text-light: #B89FCC;
-    --font-main: 'ZCOOL KuaiLe', 'Microsoft YaHei', sans-serif;
-    --font-handwrite: 'Ma Shan Zheng', cursive;
+    --font-main: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Weibo Sans', sans-serif;
+    --font-handwrite: 'STKaiti', 'KaiTi', 'PingFang SC', 'Microsoft YaHei', cursive, sans-serif;
 }
 
 /* ===== Reset ===== */
