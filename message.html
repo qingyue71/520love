@@ -34,6 +34,24 @@ body{font-family:var(--font-main);background:var(--bg-gradient);color:var(--text
 .msg-delete{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text-light);cursor:pointer;font-size:0.9rem;opacity:0;transition:opacity 0.3s}
 .msg-item:hover .msg-delete,.msg-item:active .msg-delete{opacity:1}
 .msg-empty{text-align:center;color:var(--text-light);font-size:0.9rem;padding:30px;font-family:var(--font-handwrite)}
+.section-divider{max-width:500px;margin:30px auto 20px;text-align:center;font-size:1.1rem;color:var(--purple-deep);position:relative}
+.section-divider::before,.section-divider::after{content:'';position:absolute;top:50%;width:60px;height:1px;background:var(--pink-light)}
+.section-divider::before{left:0}.section-divider::after{right:0}
+.food-card{max-width:500px;margin:0 auto 20px;background:var(--card-bg);border-radius:20px;padding:20px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5)}
+.food-card-title{font-size:1rem;color:var(--text-primary);margin-bottom:12px;text-align:center;font-family:var(--font-handwrite)}
+.food-today{background:linear-gradient(135deg,rgba(255,182,200,0.15),rgba(201,166,232,0.15));border-radius:12px;padding:15px;margin-bottom:15px;text-align:center}
+.food-today-label{font-size:0.8rem;color:var(--text-light);margin-bottom:8px}
+.food-today-text{font-size:1.1rem;color:var(--text-primary);font-family:var(--font-handwrite);min-height:24px}
+.food-input-row{display:flex;gap:8px;align-items:center}
+.food-input{flex:1;padding:10px 15px;border:2px solid var(--pink-light);border-radius:10px;background:rgba(255,255,255,0.6);font-family:var(--font-main);font-size:0.9rem;color:var(--text-primary);outline:none;transition:border-color 0.3s}
+.food-input:focus{border-color:var(--pink)}.food-input::placeholder{color:var(--text-light)}
+.food-btn{padding:10px 20px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;font-family:var(--font-main);font-size:0.85rem;cursor:pointer;white-space:nowrap}
+.food-history{margin-top:12px}
+.food-history-title{font-size:0.8rem;color:var(--text-light);margin-bottom:8px}
+.food-history-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,0.4);border-radius:8px;margin-bottom:6px;font-size:0.85rem}
+.food-history-date{color:var(--text-light);font-size:0.75rem}
+.food-history-text{color:var(--text-primary);flex:1}
+.food-history-del{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:0.8rem;margin-left:8px}
 .footer{text-align:center;padding:30px 20px}.footer p{font-size:0.8rem;color:var(--text-light)}
 @media(max-width:480px){html{font-size:14px}}
 </style>
@@ -46,6 +64,26 @@ body{font-family:var(--font-main);background:var(--bg-gradient);color:var(--text
 <h1 class="msg-title">520 暖心留言板</h1>
 <p class="msg-subtitle">写下想对TA说的话</p>
 </div>
+
+<!-- 今天想吃什么 -->
+<div class="food-card">
+<div class="food-card-title">今天想吃什么呀~</div>
+<div class="food-today">
+<div class="food-today-label">今天的愿望</div>
+<div class="food-today-text" id="foodTodayText">还没有想好呢~</div>
+</div>
+<div class="food-input-row">
+<input type="text" id="foodInput" class="food-input" placeholder="写下今天想吃的..." maxlength="100">
+<button id="foodBtn" class="food-btn">许愿</button>
+</div>
+<div class="food-history">
+<div class="food-history-title">最近的心愿单</div>
+<div id="foodList"></div>
+</div>
+</div>
+
+<div class="section-divider">暖心留言</div>
+
 <div class="msg-input-area">
 <textarea id="msgTextarea" class="msg-textarea" placeholder="写下你的心里话..." maxlength="500"></textarea>
 <div class="msg-sender">
@@ -62,13 +100,26 @@ body{font-family:var(--font-main);background:var(--bg-gradient);color:var(--text
 <script>
 var Storage={get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):(d||null)}catch(e){return d||null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 function escapeHtml(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+function todayKey(){return new Date().toISOString().slice(0,10)}
 function renderMessages(){var l=document.getElementById('msgList');if(!l)return;var ms=Storage.get('love_messages',[]);if(ms.length===0){l.innerHTML='<div class="msg-empty">还没有留言哦，写下第一句暖心话吧~</div>';return}l.innerHTML=ms.map(function(m){return'<div class="msg-item"><div class="msg-item-header"><span class="msg-sender-name '+(m.sender==='青云'?'boy':'')+'">'+m.sender+'</span><span class="msg-time">'+m.time+'</span></div><div class="msg-content">'+escapeHtml(m.text)+'</div><button class="msg-delete" onclick="deleteMessage('+m.id+')">&times;</button></div>'}).join('')}
 function deleteMessage(id){var ms=Storage.get('love_messages',[]);ms=ms.filter(function(m){return m.id!==id});Storage.set('love_messages',ms);renderMessages()}
+function renderFood(){
+var today=Storage.get('food_today_'+todayKey(),null);
+var el=document.getElementById('foodTodayText');
+if(today){el.textContent=today.text+'（'+today.sender+'）'}else{el.textContent='还没有想好呢~'}
+var list=Storage.get('food_history',[]);
+var listEl=document.getElementById('foodList');
+if(list.length===0){listEl.innerHTML='<div style="text-align:center;color:var(--text-light);font-size:0.8rem;padding:10px">还没有心愿记录~</div>';return}
+listEl.innerHTML=list.slice(0,10).map(function(f){return'<div class="food-history-item"><span class="food-history-text">'+escapeHtml(f.text)+'</span><span class="food-history-date">'+f.date+' '+f.sender+'</span><button class="food-history-del" onclick="delFood('+f.id+')">&times;</button></div>'}).join('')}
+function delFood(id){var list=Storage.get('food_history',[]);list=list.filter(function(f){return f.id!==id});Storage.set('food_history',list);renderFood()}
 document.addEventListener('DOMContentLoaded',function(){
 var btn=document.getElementById('msgSendBtn'),ta=document.getElementById('msgTextarea'),sel=document.getElementById('msgSenderSelect');
 btn.addEventListener('click',send);ta.addEventListener('keypress',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
-renderMessages();createPetals();
+var foodBtn=document.getElementById('foodBtn'),foodInput=document.getElementById('foodInput');
+foodBtn.addEventListener('click',addFood);foodInput.addEventListener('keypress',function(e){if(e.key==='Enter')addFood()});
+renderMessages();renderFood();createPetals();
 function send(){var t=ta.value.trim();if(!t)return;var ms=Storage.get('love_messages',[]);ms.unshift({id:Date.now(),text:t,sender:sel.value,time:new Date().toLocaleString('zh-CN')});if(ms.length>100)ms.length=100;Storage.set('love_messages',ms);ta.value='';renderMessages()}
+function addFood(){var t=foodInput.value.trim();if(!t)return;var sender=sel.value;Storage.set('food_today_'+todayKey(),{text:t,sender:sender});var list=Storage.get('food_history',[]);list.unshift({id:Date.now(),text:t,sender:sender,date:todayKey()});if(list.length>50)list.length=50;Storage.set('food_history',list);foodInput.value='';renderFood()}
 });
 function createPetals(){var c=document.getElementById('petalsContainer');if(!c)return;for(var i=0;i<8;i++){var p=document.createElement('div');p.className='petal';p.style.left=Math.random()*100+'%';p.style.width=(8+Math.random()*10)+'px';p.style.height=(8+Math.random()*10)+'px';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*15+'s';p.style.opacity=0.3+Math.random()*0.4;var hue=Math.random()>0.5?'340, 80%, 85%':'270, 50%, 85%';p.style.background='radial-gradient(ellipse, hsla('+hue+', 0.8) 0%, transparent 70%)';c.appendChild(p)}}
 </script>
