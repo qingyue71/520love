@@ -70,7 +70,7 @@ function initPasswordScreen() {
 
     // Check if already authenticated
     if (sessionStorage.getItem('love_auth') === 'true') {
-        screen.classList.remove('active');
+        screen.style.display = 'none';
         document.getElementById('mainContent').classList.add('active');
         return;
     }
@@ -95,8 +95,7 @@ function initPasswordScreen() {
             screen.style.transition = 'opacity 0.5s ease';
             screen.style.opacity = '0';
             setTimeout(() => {
-                screen.classList.remove('active');
-                screen.style.opacity = '';
+                screen.style.display = 'none';
                 document.getElementById('mainContent').classList.add('active');
                 initMainPage();
             }, 500);
