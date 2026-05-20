@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>520 - 管理后台</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="petals-container" id="petalsContainer"></div>
+
+    <div class="admin-page">
+        <a href="index.html" class="msg-back">&larr;</a>
+
+        <!-- Login -->
+        <div id="adminLogin" class="admin-login">
+            <h2 class="admin-login-title">管理后台</h2>
+            <div class="admin-login-form">
+                <div class="admin-field">
+                    <label>用户名</label>
+                    <input type="text" id="adminUsername" placeholder="请输入管理员用户名" autocomplete="off">
+                </div>
+                <div class="admin-field">
+                    <label>密码</label>
+                    <input type="password" id="adminPassword" placeholder="请输入密码" autocomplete="off">
+                </div>
+                <button id="adminLoginBtn" class="admin-login-btn">登录</button>
+                <p id="adminError" class="admin-error"></p>
+            </div>
+        </div>
+
+        <!-- Panel -->
+        <div id="adminPanel" class="admin-panel">
+            <div class="admin-panel-header">
+                <h2 class="admin-panel-title">管理面板</h2>
+                <p id="adminRole" class="admin-role"></p>
+                <button id="adminLogout" class="admin-logout">退出</button>
+            </div>
+
+            <!-- Section Visibility -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">板块管理</h3>
+                <div class="section-toggle-list">
+                    <div class="section-toggle-item">
+                        <span class="toggle-label">相爱时长</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggleTimer" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="section-toggle-item">
+                        <span class="toggle-label">隐藏彩蛋（爱心告白）</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggleEasterEgg" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="section-toggle-item">
+                        <span class="toggle-label">生日专区</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggleBirthday" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="section-toggle-item">
+                        <span class="toggle-label">每日宠溺语录</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggleQuotes" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Change -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">修改登录密码</h3>
+                <div class="pwd-change-form">
+                    <input type="password" id="newSitePassword" placeholder="新的网站登录密码">
+                    <button id="changePwdBtn" class="pwd-change-btn">修改密码</button>
+                </div>
+                <p id="pwdChangeMsg" class="admin-msg"></p>
+            </div>
+
+            <!-- Quote Management -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">语录管理</h3>
+                <div class="pwd-change-form">
+                    <input type="text" id="newQuoteInput" placeholder="添加新的宠溺语录">
+                    <button id="addQuoteBtn" class="pwd-change-btn">添加语录</button>
+                </div>
+                <p id="quoteMsg" class="admin-msg"></p>
+                <div id="quoteList" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Message Management -->
+            <div class="admin-section">
+                <h3 class="admin-section-title">留言管理</h3>
+                <div id="adminMsgList"></div>
+            </div>
+
+            <footer class="footer">
+                <a href="index.html" style="color: var(--text-light); text-decoration: none;">返回首页</a>
+            </footer>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

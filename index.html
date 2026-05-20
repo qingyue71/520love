@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>520 - Zhu Qingyun & Zhang Yaqing</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Password Screen -->
+    <div id="passwordScreen" class="screen active">
+        <div class="hearts-bg" id="passwordHearts"></div>
+        <div class="password-container">
+            <div class="heart-shape">
+                <div class="heart-inner">
+                    <div class="heart-input-area">
+                        <p class="heart-title">输入爱的密码</p>
+                        <input type="password" id="passwordInput" placeholder="请输入密码" autocomplete="off">
+                        <button id="passwordBtn" class="heart-btn">进入</button>
+                        <p id="passwordError" class="error-msg"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="screen">
+        <!-- Floating petals -->
+        <div class="petals-container" id="petalsContainer"></div>
+
+        <!-- Gardenia flowers -->
+        <div class="gardenia-container" id="gardeniaContainer"></div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="names-display">
+                <span class="name boy-name">Zhu QingYun</span>
+                <span class="heart-icon">&hearts;</span>
+                <span class="name girl-name">Zhang YaQing</span>
+            </div>
+            <div class="subtitle">我们的爱情故事</div>
+        </header>
+
+        <!-- Love Timer -->
+        <section class="section love-timer-section">
+            <div class="section-title">相爱时长</div>
+            <div class="timer-card">
+                <div class="timer-display">
+                    <div class="timer-item">
+                        <span class="timer-number" id="days">0</span>
+                        <span class="timer-label">天</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-item">
+                        <span class="timer-number" id="hours">0</span>
+                        <span class="timer-label">小时</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-item">
+                        <span class="timer-number" id="minutes">0</span>
+                        <span class="timer-label">分钟</span>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-item">
+                        <span class="timer-number" id="seconds">0</span>
+                        <span class="timer-label">秒</span>
+                    </div>
+                </div>
+                <div class="since-date">自 2025年1月25日 起</div>
+            </div>
+        </section>
+
+        <!-- Center Heart Easter Egg -->
+        <section class="section easter-egg-section">
+            <div class="center-heart-container" id="centerHeart">
+                <div class="big-heart">&hearts;</div>
+                <p class="heart-hint">点击爱心</p>
+            </div>
+            <div class="confession-modal" id="confessionModal">
+                <div class="confession-content">
+                    <div class="confession-close" id="confessionClose">&times;</div>
+                    <p class="confession-text">
+                        亲爱的雅清：<br><br>
+                        从遇见你的那一刻起，<br>
+                        我的世界便有了色彩。<br><br>
+                        你是我清晨的第一缕阳光，<br>
+                        是我夜晚最亮的星。<br><br>
+                        愿与你携手，<br>
+                        走过春夏秋冬，<br>
+                        看遍世间风景。<br><br>
+                        每一天都是520，<br>
+                        因为每一天都爱你。<br><br>
+                        <span class="confession-sign">—— 你的青云</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Birthday Section -->
+        <section class="section birthday-section">
+            <div class="section-title">生日专区</div>
+            <div class="birthday-cards">
+                <div class="birthday-card boy-card">
+                    <div class="birthday-avatar">👦</div>
+                    <div class="birthday-name">朱青云</div>
+                    <div class="birthday-date">2005.07.30</div>
+                    <div class="birthday-zodiac">狮子座</div>
+                    <div class="birthday-msg">温柔而坚定的守护者，用沉默的行动诠释最深的爱意，像夏日阳光般温暖而耀眼。</div>
+                </div>
+                <div class="birthday-card girl-card">
+                    <div class="birthday-avatar">👧</div>
+                    <div class="birthday-name">张雅清</div>
+                    <div class="birthday-date">2008.02.24</div>
+                    <div class="birthday-zodiac">双鱼座</div>
+                    <div class="birthday-msg">如春水般温柔细腻，眼里藏着星辰大海，一笑便融化了整个冬天，是世间最美好的存在。</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sweet Quotes -->
+        <section class="section quotes-section">
+            <div class="section-title">每日宠溺</div>
+            <div class="quote-card">
+                <div class="quote-text" id="quoteText">你是我见过最美的风景。</div>
+                <div class="quote-dots" id="quoteDots"></div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <a href="message.html" class="nav-item">
+                <span class="nav-icon">💌</span>
+                <span class="nav-label">留言板</span>
+            </a>
+            <a href="admin.html" class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">管理</span>
+            </a>
+        </nav>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ♥ by QingYun & YaQing</p>
+            <p class="footer-date">520 Forever</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
