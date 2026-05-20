@@ -1,6 +1,6 @@
 // ===== Config =====
 const CONFIG = {
-    loveStartDate: new Date('2025-01-25T00:00:00'),
+    loveStartDate: new Date('2026-01-25T00:00:00'),
     sitePassword: 'ZYQzqy02240730',
     admins: [
         { username: '云栖清雅', password: '0224', role: '男主人' },
