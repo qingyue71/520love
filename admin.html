@@ -1,110 +1,130 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>520 - 管理后台</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>520 - 管理后台</title>
+<style>
+:root{--pink-light:#FFE4EC;--pink:#FFB6C8;--pink-deep:#FF8FAB;--purple-light:#E8D5F5;--purple:#C9A6E8;--purple-deep:#A678D6;--bg-gradient:linear-gradient(135deg,#FFF0F5 0%,#F5E6FF 50%,#FFF0F5 100%);--card-bg:rgba(255,255,255,0.85);--shadow:0 4px 20px rgba(200,150,200,0.15);--text-primary:#5A3D6A;--text-secondary:#8B6F9E;--text-light:#B89FCC;--font-main:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;--font-handwrite:'STKaiti','KaiTi','PingFang SC','Microsoft YaHei',cursive,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}body{font-family:var(--font-main);background:var(--bg-gradient);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+.petals-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+.petal{position:absolute;width:12px;height:12px;background:radial-gradient(ellipse,var(--pink) 0%,transparent 70%);border-radius:50% 0 50% 50%;opacity:0.6;animation:petalFall linear infinite}
+@keyframes petalFall{0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:0}10%{opacity:0.6}90%{opacity:0.6}100%{transform:translateY(100vh) rotate(720deg) translateX(100px);opacity:0}}
+.admin-page{min-height:100vh;padding:20px;padding-bottom:30px}
+.admin-login{max-width:400px;margin:80px auto 0;text-align:center}
+.admin-login-title{font-size:1.5rem;color:var(--purple-deep);margin-bottom:25px}
+.admin-login-form{background:var(--card-bg);border-radius:20px;padding:30px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5)}
+.admin-field{margin-bottom:15px;text-align:left}
+.admin-field label{display:block;font-size:0.85rem;color:var(--text-secondary);margin-bottom:5px}
+.admin-field input{width:100%;padding:10px 15px;border:2px solid var(--pink-light);border-radius:10px;background:rgba(255,255,255,0.6);font-family:var(--font-main);font-size:0.9rem;color:var(--text-primary);outline:none;transition:border-color 0.3s}
+.admin-field input:focus{border-color:var(--pink)}
+.admin-login-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;font-family:var(--font-main);font-size:1rem;cursor:pointer;margin-top:10px}
+.admin-error{color:var(--pink-deep);font-size:0.8rem;margin-top:10px;min-height:20px}
+.admin-panel{display:none;max-width:600px;margin:0 auto}.admin-panel.show{display:block}
+.admin-panel-header{text-align:center;padding:20px 0;position:relative}
+.admin-panel-title{font-size:1.3rem;color:var(--purple-deep)}
+.admin-role{font-size:0.85rem;color:var(--text-light);margin-top:5px}
+.admin-logout{position:absolute;top:20px;right:0;background:none;border:1px solid var(--pink-light);border-radius:8px;padding:5px 12px;color:var(--text-secondary);font-family:var(--font-main);font-size:0.8rem;cursor:pointer}
+.admin-section{background:var(--card-bg);border-radius:20px;padding:25px;margin-bottom:20px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5)}
+.admin-section-title{font-size:1rem;color:var(--text-primary);margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--pink-light)}
+.section-toggle-list{display:flex;flex-direction:column;gap:10px}
+.section-toggle-item{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;background:rgba(255,255,255,0.5);border-radius:10px}
+.toggle-label{font-size:0.9rem;color:var(--text-primary)}
+.toggle-switch{position:relative;width:48px;height:26px;cursor:pointer}
+.toggle-switch input{display:none}
+.toggle-slider{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--pink-light);border-radius:13px;transition:background 0.3s}
+.toggle-slider::before{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.toggle-switch input:checked+.toggle-slider{background:var(--pink-deep)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(22px)}
+.pwd-change-form{display:flex;flex-direction:column;gap:10px}
+.pwd-change-form input{padding:10px 15px;border:2px solid var(--pink-light);border-radius:10px;background:rgba(255,255,255,0.6);font-family:var(--font-main);font-size:0.9rem;color:var(--text-primary);outline:none}
+.pwd-change-btn{padding:10px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;font-family:var(--font-main);font-size:0.9rem;cursor:pointer}
+.admin-msg{font-size:0.8rem;color:var(--pink-deep);margin-top:8px;min-height:20px;text-align:center}
+.admin-msg-item{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;background:rgba(255,255,255,0.5);border-radius:10px;margin-bottom:8px}
+.admin-msg-text{font-size:0.85rem;color:var(--text-primary);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:10px}
+.admin-msg-del{background:none;border:1px solid var(--pink-light);border-radius:6px;padding:3px 10px;color:var(--text-light);font-size:0.75rem;cursor:pointer;flex-shrink:0}
+.msg-empty{text-align:center;color:var(--text-light);font-size:0.9rem;padding:30px;font-family:var(--font-handwrite)}
+.msg-back{position:absolute;top:20px;left:20px;color:var(--text-secondary);text-decoration:none;font-size:1.5rem;z-index:10}
+.footer{text-align:center;padding:30px 20px}.footer a{color:var(--text-light);text-decoration:none}
+@media(max-width:480px){html{font-size:14px}}
+</style>
 </head>
 <body>
-    <div class="petals-container" id="petalsContainer"></div>
-
-    <div class="admin-page">
-        <a href="index.html" class="msg-back">&larr;</a>
-
-        <!-- Login -->
-        <div id="adminLogin" class="admin-login">
-            <h2 class="admin-login-title">管理后台</h2>
-            <div class="admin-login-form">
-                <div class="admin-field">
-                    <label>用户名</label>
-                    <input type="text" id="adminUsername" placeholder="请输入管理员用户名" autocomplete="off">
-                </div>
-                <div class="admin-field">
-                    <label>密码</label>
-                    <input type="password" id="adminPassword" placeholder="请输入密码" autocomplete="off">
-                </div>
-                <button id="adminLoginBtn" class="admin-login-btn">登录</button>
-                <p id="adminError" class="admin-error"></p>
-            </div>
-        </div>
-
-        <!-- Panel -->
-        <div id="adminPanel" class="admin-panel">
-            <div class="admin-panel-header">
-                <h2 class="admin-panel-title">管理面板</h2>
-                <p id="adminRole" class="admin-role"></p>
-                <button id="adminLogout" class="admin-logout">退出</button>
-            </div>
-
-            <!-- Section Visibility -->
-            <div class="admin-section">
-                <h3 class="admin-section-title">板块管理</h3>
-                <div class="section-toggle-list">
-                    <div class="section-toggle-item">
-                        <span class="toggle-label">相爱时长</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="toggleTimer" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="section-toggle-item">
-                        <span class="toggle-label">隐藏彩蛋（爱心告白）</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="toggleEasterEgg" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="section-toggle-item">
-                        <span class="toggle-label">生日专区</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="toggleBirthday" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="section-toggle-item">
-                        <span class="toggle-label">每日宠溺语录</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="toggleQuotes" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Password Change -->
-            <div class="admin-section">
-                <h3 class="admin-section-title">修改登录密码</h3>
-                <div class="pwd-change-form">
-                    <input type="password" id="newSitePassword" placeholder="新的网站登录密码">
-                    <button id="changePwdBtn" class="pwd-change-btn">修改密码</button>
-                </div>
-                <p id="pwdChangeMsg" class="admin-msg"></p>
-            </div>
-
-            <!-- Quote Management -->
-            <div class="admin-section">
-                <h3 class="admin-section-title">语录管理</h3>
-                <div class="pwd-change-form">
-                    <input type="text" id="newQuoteInput" placeholder="添加新的宠溺语录">
-                    <button id="addQuoteBtn" class="pwd-change-btn">添加语录</button>
-                </div>
-                <p id="quoteMsg" class="admin-msg"></p>
-                <div id="quoteList" style="margin-top: 15px;"></div>
-            </div>
-
-            <!-- Message Management -->
-            <div class="admin-section">
-                <h3 class="admin-section-title">留言管理</h3>
-                <div id="adminMsgList"></div>
-            </div>
-
-            <footer class="footer">
-                <a href="index.html" style="color: var(--text-light); text-decoration: none;">返回首页</a>
-            </footer>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<div class="petals-container" id="petalsContainer"></div>
+<div class="admin-page">
+<a href="index.html" class="msg-back">&larr;</a>
+<div id="adminLogin" class="admin-login">
+<h2 class="admin-login-title">管理后台</h2>
+<div class="admin-login-form">
+<div class="admin-field"><label>用户名</label><input type="text" id="adminUsername" placeholder="请输入管理员用户名" autocomplete="off"></div>
+<div class="admin-field"><label>密码</label><input type="password" id="adminPassword" placeholder="请输入密码" autocomplete="off"></div>
+<button id="adminLoginBtn" class="admin-login-btn">登录</button>
+<p id="adminError" class="admin-error"></p>
+</div>
+</div>
+<div id="adminPanel" class="admin-panel">
+<div class="admin-panel-header">
+<h2 class="admin-panel-title">管理面板</h2>
+<p id="adminRole" class="admin-role"></p>
+<button id="adminLogout" class="admin-logout">退出</button>
+</div>
+<div class="admin-section">
+<h3 class="admin-section-title">板块管理</h3>
+<div class="section-toggle-list">
+<div class="section-toggle-item"><span class="toggle-label">相爱时长</span><label class="toggle-switch"><input type="checkbox" id="toggleTimer" checked><span class="toggle-slider"></span></label></div>
+<div class="section-toggle-item"><span class="toggle-label">隐藏彩蛋（爱心告白）</span><label class="toggle-switch"><input type="checkbox" id="toggleEasterEgg" checked><span class="toggle-slider"></span></label></div>
+<div class="section-toggle-item"><span class="toggle-label">生日专区</span><label class="toggle-switch"><input type="checkbox" id="toggleBirthday" checked><span class="toggle-slider"></span></label></div>
+<div class="section-toggle-item"><span class="toggle-label">每日宠溺语录</span><label class="toggle-switch"><input type="checkbox" id="toggleQuotes" checked><span class="toggle-slider"></span></label></div>
+</div>
+</div>
+<div class="admin-section">
+<h3 class="admin-section-title">修改登录密码</h3>
+<div class="pwd-change-form"><input type="password" id="newSitePassword" placeholder="新的网站登录密码"><button id="changePwdBtn" class="pwd-change-btn">修改密码</button></div>
+<p id="pwdChangeMsg" class="admin-msg"></p>
+</div>
+<div class="admin-section">
+<h3 class="admin-section-title">语录管理</h3>
+<div class="pwd-change-form"><input type="text" id="newQuoteInput" placeholder="添加新的宠溺语录"><button id="addQuoteBtn" class="pwd-change-btn">添加语录</button></div>
+<p id="quoteMsg" class="admin-msg"></p>
+<div id="quoteList" style="margin-top:15px"></div>
+</div>
+<div class="admin-section">
+<h3 class="admin-section-title">留言管理</h3>
+<div id="adminMsgList"></div>
+</div>
+<footer class="footer"><a href="index.html">返回首页</a></footer>
+</div>
+</div>
+<script>
+var CONFIG={sitePassword:'ZYQzqy02240730',admins:[{username:'云栖清雅',password:'0224',role:'男主人'},{username:'雅韵云悠',password:'0730',role:'女主人'}],quotes:['你是我见过最美的风景。','想把世界上最好的都给你。','今天的风好甜，因为想你了。','你笑起来真好看，像春天的花一样。','余生很长，我只想和你走。','你是我最想留住的幸运。','每天醒来看到你，就是最大的幸福。','你的名字是我见过最短的情诗。','世界那么大，我的眼里只有你。','想和你一起慢慢变老。','你是我所有的心事和欢喜。','遇见你之后，生活变得好甜。','你是我藏在心底的秘密。','喜欢你是一件很幸福的事。','你是我今生最美的相遇。','愿往后余生，冷暖有相知。','你是我温暖的手套，冰冷的啤酒。','我看过很多风景，唯独你最入眼。','你是我的今天，也是我的每一天。','想牵你的手，从心动到白头。']};
+var Storage={get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):(d||null)}catch(e){return d||null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function escapeHtml(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+document.addEventListener('DOMContentLoaded',function(){
+createPetals();
+var lb=document.getElementById('adminLoginBtn'),ls=document.getElementById('adminLogin'),ps=document.getElementById('adminPanel');
+var ar=sessionStorage.getItem('admin_role');
+if(ar){ls.style.display='none';ps.classList.add('show');showPanel(ar)}
+lb.addEventListener('click',doLogin);
+document.getElementById('adminUsername').addEventListener('keypress',function(e){if(e.key==='Enter')document.getElementById('adminPassword').focus()});
+document.getElementById('adminPassword').addEventListener('keypress',function(e){if(e.key==='Enter')doLogin()});
+function doLogin(){var u=document.getElementById('adminUsername').value.trim(),p=document.getElementById('adminPassword').value.trim(),err=document.getElementById('adminError');var a=null;for(var i=0;i<CONFIG.admins.length;i++){if(CONFIG.admins[i].username===u&&CONFIG.admins[i].password===p){a=CONFIG.admins[i];break}}if(a){sessionStorage.setItem('admin_role',a.role);ls.style.display='none';ps.classList.add('show');showPanel(a.role)}else{err.textContent='用户名或密码错误';document.getElementById('adminPassword').value=''}}
+});
+function showPanel(role){
+document.getElementById('adminRole').textContent=role+' 管理模式';
+document.getElementById('adminLogout').addEventListener('click',function(){sessionStorage.removeItem('admin_role');location.reload()});
+var vis=Storage.get('section_visibility',{timer:true,easterEgg:true,birthday:true,quotes:true});
+var tg={toggleTimer:'timer',toggleEasterEgg:'easterEgg',toggleBirthday:'birthday',toggleQuotes:'quotes'};
+for(var k in tg){(function(inputId,key){var inp=document.getElementById(inputId);if(!inp)return;inp.checked=vis[key]!==false;inp.addEventListener('change',function(){vis[key]=inp.checked;Storage.set('section_visibility',vis)})})(k,tg[k])}
+document.getElementById('changePwdBtn').addEventListener('click',function(){var np=document.getElementById('newSitePassword').value.trim(),msg=document.getElementById('pwdChangeMsg');if(!np){msg.textContent='新密码不能为空';return}if(np.length<4){msg.textContent='密码至少4位';return}Storage.set('site_password',np);msg.textContent='密码修改成功！';document.getElementById('newSitePassword').value='';setTimeout(function(){msg.textContent=''},3000)});
+renderAdminMessages();initQuoteManagement();
+}
+function renderAdminMessages(){var l=document.getElementById('adminMsgList');if(!l)return;var ms=Storage.get('love_messages',[]);if(ms.length===0){l.innerHTML='<div class="msg-empty">暂无留言</div>';return}l.innerHTML=ms.map(function(m){return'<div class="admin-msg-item"><span class="admin-msg-text">'+m.sender+': '+escapeHtml(m.text)+'</span><button class="admin-msg-del" onclick="adminDelMsg('+m.id+')">删除</button></div>'}).join('')}
+function adminDelMsg(id){var ms=Storage.get('love_messages',[]);ms=ms.filter(function(m){return m.id!==id});Storage.set('love_messages',ms);renderAdminMessages()}
+function initQuoteManagement(){var ab=document.getElementById('addQuoteBtn'),inp=document.getElementById('newQuoteInput'),msg=document.getElementById('quoteMsg');if(!ab)return;renderQuoteList();ab.addEventListener('click',function(){var t=inp.value.trim();if(!t)return;var qs=Storage.get('custom_quotes',CONFIG.quotes.slice());qs.push(t);Storage.set('custom_quotes',qs);inp.value='';msg.textContent='语录添加成功！';renderQuoteList();setTimeout(function(){msg.textContent=''},3000)})}
+function renderQuoteList(){var l=document.getElementById('quoteList');if(!l)return;var qs=Storage.get('custom_quotes',CONFIG.quotes);l.innerHTML=qs.map(function(q,i){return'<div class="admin-msg-item"><span class="admin-msg-text">'+escapeHtml(q)+'</span><button class="admin-msg-del" onclick="delQuote('+i+')">删除</button></div>'}).join('')}
+function delQuote(idx){var qs=Storage.get('custom_quotes',CONFIG.quotes.slice());qs.splice(idx,1);if(qs.length===0)qs=CONFIG.quotes.slice();Storage.set('custom_quotes',qs);renderQuoteList()}
+function createPetals(){var c=document.getElementById('petalsContainer');if(!c)return;for(var i=0;i<8;i++){var p=document.createElement('div');p.className='petal';p.style.left=Math.random()*100+'%';p.style.width=(8+Math.random()*10)+'px';p.style.height=(8+Math.random()*10)+'px';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*15+'s';p.style.opacity=0.3+Math.random()*0.4;var hue=Math.random()>0.5?'340, 80%, 85%':'270, 50%, 85%';p.style.background='radial-gradient(ellipse, hsla('+hue+', 0.8) 0%, transparent 70%)';c.appendChild(p)}}
+</script>
 </body>
 </html>

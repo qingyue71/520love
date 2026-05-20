@@ -1,151 +1,210 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>520 - Zhu Qingyun & Zhang Yaqing</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>520 - Zhu Qingyun & Zhang Yaqing</title>
+<style>
+:root{--pink-light:#FFE4EC;--pink:#FFB6C8;--pink-deep:#FF8FAB;--purple-light:#E8D5F5;--purple:#C9A6E8;--purple-deep:#A678D6;--bg-gradient:linear-gradient(135deg,#FFF0F5 0%,#F5E6FF 50%,#FFF0F5 100%);--card-bg:rgba(255,255,255,0.85);--shadow:0 4px 20px rgba(200,150,200,0.15);--shadow-hover:0 8px 30px rgba(200,150,200,0.25);--text-primary:#5A3D6A;--text-secondary:#8B6F9E;--text-light:#B89FCC;--font-main:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;--font-handwrite:'STKaiti','KaiTi','PingFang SC','Microsoft YaHei',cursive,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font-main);background:var(--bg-gradient);color:var(--text-primary);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+#passwordScreen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFF0F5 0%,#F0E0FF 50%,#FFE4EC 100%);z-index:1000}
+.password-container{position:relative;z-index:2}
+.heart-shape{position:relative;width:300px;height:280px;display:flex;align-items:center;justify-content:center}
+.heart-shape::before,.heart-shape::after{content:'';position:absolute;width:150px;height:240px;border-radius:150px 150px 0 0;background:linear-gradient(180deg,var(--pink-deep),var(--purple));top:-40px;opacity:0.9}
+.heart-shape::before{left:15px;transform:rotate(-45deg);transform-origin:0 100%}
+.heart-shape::after{right:15px;transform:rotate(45deg);transform-origin:100% 100%}
+.heart-inner{position:relative;z-index:2;text-align:center;padding:20px}
+.heart-input-area{position:relative;z-index:3}
+.heart-title{font-size:1.2rem;color:#fff;margin-bottom:15px;text-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.heart-input-area input{width:180px;padding:10px 15px;border:2px solid rgba(255,255,255,0.6);border-radius:25px;background:rgba(255,255,255,0.3);font-family:var(--font-main);font-size:0.9rem;color:#fff;text-align:center;outline:none;transition:all 0.3s}
+.heart-input-area input::placeholder{color:rgba(255,255,255,0.7)}
+.heart-input-area input:focus{border-color:#fff;background:rgba(255,255,255,0.4)}
+.heart-btn{display:block;margin:12px auto 0;padding:8px 30px;border:2px solid rgba(255,255,255,0.7);border-radius:25px;background:rgba(255,255,255,0.2);color:#fff;font-family:var(--font-main);font-size:0.95rem;cursor:pointer;transition:all 0.3s}
+.heart-btn:hover{background:rgba(255,255,255,0.4);transform:scale(1.05)}
+.error-msg{color:#FFE0E0;font-size:0.8rem;margin-top:8px;min-height:20px}
+.hearts-bg{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:1}
+.hearts-bg .float-heart{position:absolute;color:rgba(255,182,200,0.3);font-size:20px;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
+#mainContent{padding-bottom:80px}
+.petals-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+.petal{position:absolute;width:12px;height:12px;background:radial-gradient(ellipse,var(--pink) 0%,transparent 70%);border-radius:50% 0 50% 50%;opacity:0.6;animation:petalFall linear infinite}
+@keyframes petalFall{0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:0}10%{opacity:0.6}90%{opacity:0.6}100%{transform:translateY(100vh) rotate(720deg) translateX(100px);opacity:0}}
+.gardenia-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.gardenia{position:absolute;opacity:0.15;animation:gardeniaFloat ease-in-out infinite}
+.gardenia svg{filter:drop-shadow(0 0 10px rgba(160,120,200,0.3))}
+@keyframes gardeniaFloat{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}25%{transform:translateY(-20px) rotate(5deg) scale(1.05)}50%{transform:translateY(-10px) rotate(-3deg) scale(1)}75%{transform:translateY(-25px) rotate(3deg) scale(1.03)}}
+.header{text-align:center;padding:40px 20px 20px;position:relative;z-index:2}
+.names-display{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap}
+.name{font-size:1.5rem;font-weight:bold;letter-spacing:2px}
+.boy-name{color:var(--purple-deep)}.girl-name{color:var(--pink-deep)}
+.heart-icon{color:var(--pink-deep);font-size:1.8rem;animation:heartbeat 1.5s ease-in-out infinite;display:inline-block}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.15)}60%{transform:scale(1)}}
+.subtitle{font-size:0.9rem;color:var(--text-light);margin-top:8px;font-family:var(--font-handwrite);letter-spacing:3px}
+.section{padding:20px;max-width:600px;margin:0 auto;position:relative;z-index:2}
+.section-title{text-align:center;font-size:1.3rem;color:var(--purple-deep);margin-bottom:20px;position:relative;display:inline-block;left:50%;transform:translateX(-50%)}
+.section-title::before,.section-title::after{content:'✿';position:absolute;top:50%;transform:translateY(-50%);font-size:0.9rem;color:var(--pink)}
+.section-title::before{left:-25px}.section-title::after{right:-25px}
+.timer-card{background:var(--card-bg);border-radius:20px;padding:30px 20px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5)}
+.timer-display{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.timer-item{display:flex;flex-direction:column;align-items:center;min-width:60px}
+.timer-number{font-size:2.5rem;font-weight:bold;background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.timer-label{font-size:0.8rem;color:var(--text-secondary);margin-top:4px}
+.timer-separator{font-size:2rem;color:var(--pink);font-weight:bold;margin-top:-10px}
+.since-date{margin-top:15px;font-size:0.85rem;color:var(--text-light);font-family:var(--font-handwrite);letter-spacing:2px}
+.easter-egg-section{text-align:center;padding:30px 20px}
+.center-heart-container{cursor:pointer;display:inline-block;transition:transform 0.3s;position:relative}
+.center-heart-container:hover{transform:scale(1.1)}.center-heart-container:active{transform:scale(0.95)}
+.big-heart{font-size:5rem;color:var(--pink-deep);animation:heartbeat 2s ease-in-out infinite;filter:drop-shadow(0 4px 15px rgba(255,143,171,0.4));line-height:1}
+.heart-hint{font-size:0.8rem;color:var(--text-light);margin-top:5px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.confession-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(90,61,106,0.6);z-index:100;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.5s ease}
+.confession-modal.show{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.confession-content{background:linear-gradient(135deg,#FFF5F8,#F8F0FF);border-radius:25px;padding:35px 30px;max-width:400px;width:100%;position:relative;box-shadow:0 20px 60px rgba(166,120,214,0.3);border:1px solid rgba(255,255,255,0.6);animation:slideUp 0.5s ease}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.confession-close{position:absolute;top:12px;right:18px;font-size:1.5rem;color:var(--text-light);cursor:pointer;transition:color 0.3s;line-height:1}
+.confession-close:hover{color:var(--pink-deep)}
+.confession-text{font-family:var(--font-handwrite);font-size:1.1rem;line-height:2;color:var(--text-primary);text-align:center}
+.confession-sign{display:inline-block;margin-top:10px;color:var(--pink-deep);font-size:1rem}
+.birthday-cards{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.birthday-card{background:var(--card-bg);border-radius:20px;padding:25px 15px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5);transition:transform 0.3s,box-shadow 0.3s}
+.birthday-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover)}
+.boy-card{border-top:3px solid var(--purple)}.girl-card{border-top:3px solid var(--pink)}
+.birthday-avatar{font-size:2.5rem;margin-bottom:10px}
+.birthday-name{font-size:1.1rem;font-weight:bold;color:var(--text-primary);margin-bottom:5px}
+.birthday-date{font-size:0.85rem;color:var(--text-secondary);margin-bottom:3px}
+.birthday-zodiac{font-size:0.8rem;color:var(--purple);margin-bottom:12px;padding:2px 12px;background:var(--purple-light);border-radius:10px;display:inline-block}
+.birthday-msg{font-size:0.8rem;color:var(--text-secondary);line-height:1.6;font-family:var(--font-handwrite)}
+.quote-card{background:var(--card-bg);border-radius:20px;padding:30px 25px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.5);min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.quote-text{font-family:var(--font-handwrite);font-size:1.2rem;color:var(--text-primary);line-height:1.8;transition:opacity 0.5s ease;min-height:50px;display:flex;align-items:center;justify-content:center}
+.quote-text.fade{opacity:0}
+.quote-dots{display:flex;gap:8px;margin-top:15px}
+.quote-dot{width:8px;height:8px;border-radius:50%;background:var(--pink-light);transition:background 0.3s,transform 0.3s}
+.quote-dot.active{background:var(--pink-deep);transform:scale(1.3)}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:rgba(255,255,255,0.95);display:flex;justify-content:center;gap:40px;padding:12px 0;box-shadow:0 -2px 20px rgba(200,150,200,0.1);z-index:50;border-top:1px solid rgba(255,182,200,0.2)}
+.nav-item{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:var(--text-secondary);transition:color 0.3s,transform 0.3s}
+.nav-item:hover,.nav-item:active{color:var(--pink-deep);transform:translateY(-2px)}
+.nav-icon{font-size:1.4rem;margin-bottom:3px}.nav-label{font-size:0.75rem}
+.footer{text-align:center;padding:30px 20px 100px;position:relative;z-index:2}
+.footer p{font-size:0.8rem;color:var(--text-light);margin-bottom:5px}
+.footer-date{font-family:var(--font-handwrite);letter-spacing:3px}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@media(max-width:480px){html{font-size:14px}.heart-shape{width:260px;height:240px}.heart-shape::before,.heart-shape::after{width:130px;height:210px}.heart-shape::before{left:12px}.heart-shape::after{right:12px}.heart-input-area input{width:160px}.timer-number{font-size:2rem}.timer-item{min-width:50px}.birthday-cards{grid-template-columns:1fr}.big-heart{font-size:4rem}.bottom-nav{gap:30px}.names-display{gap:10px}.name{font-size:1.3rem}}
+@media(max-width:360px){.heart-shape{width:240px;height:220px}.heart-shape::before,.heart-shape::after{width:120px;height:195px}.heart-shape::before{left:10px}.heart-shape::after{right:10px}.timer-number{font-size:1.6rem}.timer-separator{font-size:1.5rem}.section-title{font-size:1.1rem}}
+</style>
 </head>
 <body>
-    <!-- Password Screen -->
-    <div id="passwordScreen" class="screen active">
-        <div class="hearts-bg" id="passwordHearts"></div>
-        <div class="password-container">
-            <div class="heart-shape">
-                <div class="heart-inner">
-                    <div class="heart-input-area">
-                        <p class="heart-title">输入爱的密码</p>
-                        <input type="password" id="passwordInput" placeholder="请输入密码" autocomplete="off">
-                        <button id="passwordBtn" class="heart-btn">进入</button>
-                        <p id="passwordError" class="error-msg"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div id="mainContent" class="screen">
-        <!-- Floating petals -->
-        <div class="petals-container" id="petalsContainer"></div>
-
-        <!-- Gardenia flowers -->
-        <div class="gardenia-container" id="gardeniaContainer"></div>
-
-        <!-- Header -->
-        <header class="header">
-            <div class="names-display">
-                <span class="name boy-name">Zhu QingYun</span>
-                <span class="heart-icon">&hearts;</span>
-                <span class="name girl-name">Zhang YaQing</span>
-            </div>
-            <div class="subtitle">我们的爱情故事</div>
-        </header>
-
-        <!-- Love Timer -->
-        <section class="section love-timer-section">
-            <div class="section-title">相爱时长</div>
-            <div class="timer-card">
-                <div class="timer-display">
-                    <div class="timer-item">
-                        <span class="timer-number" id="days">0</span>
-                        <span class="timer-label">天</span>
-                    </div>
-                    <div class="timer-separator">:</div>
-                    <div class="timer-item">
-                        <span class="timer-number" id="hours">0</span>
-                        <span class="timer-label">小时</span>
-                    </div>
-                    <div class="timer-separator">:</div>
-                    <div class="timer-item">
-                        <span class="timer-number" id="minutes">0</span>
-                        <span class="timer-label">分钟</span>
-                    </div>
-                    <div class="timer-separator">:</div>
-                    <div class="timer-item">
-                        <span class="timer-number" id="seconds">0</span>
-                        <span class="timer-label">秒</span>
-                    </div>
-                </div>
-                <div class="since-date">自 2026年1月25日 起</div>
-            </div>
-        </section>
-
-        <!-- Center Heart Easter Egg -->
-        <section class="section easter-egg-section">
-            <div class="center-heart-container" id="centerHeart">
-                <div class="big-heart">&hearts;</div>
-                <p class="heart-hint">点击爱心</p>
-            </div>
-            <div class="confession-modal" id="confessionModal">
-                <div class="confession-content">
-                    <div class="confession-close" id="confessionClose">&times;</div>
-                    <p class="confession-text">
-                        亲爱的雅清：<br><br>
-                        从遇见你的那一刻起，<br>
-                        我的世界便有了色彩。<br><br>
-                        你是我清晨的第一缕阳光，<br>
-                        是我夜晚最亮的星。<br><br>
-                        愿与你携手，<br>
-                        走过春夏秋冬，<br>
-                        看遍世间风景。<br><br>
-                        每一天都是520，<br>
-                        因为每一天都爱你。<br><br>
-                        <span class="confession-sign">—— 你的青云</span>
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Birthday Section -->
-        <section class="section birthday-section">
-            <div class="section-title">生日专区</div>
-            <div class="birthday-cards">
-                <div class="birthday-card boy-card">
-                    <div class="birthday-avatar">👦</div>
-                    <div class="birthday-name">朱青云</div>
-                    <div class="birthday-date">2005.07.30</div>
-                    <div class="birthday-zodiac">狮子座</div>
-                    <div class="birthday-msg">温柔而坚定的守护者，用沉默的行动诠释最深的爱意，像夏日阳光般温暖而耀眼。</div>
-                </div>
-                <div class="birthday-card girl-card">
-                    <div class="birthday-avatar">👧</div>
-                    <div class="birthday-name">张雅清</div>
-                    <div class="birthday-date">2008.02.24</div>
-                    <div class="birthday-zodiac">双鱼座</div>
-                    <div class="birthday-msg">如春水般温柔细腻，眼里藏着星辰大海，一笑便融化了整个冬天，是世间最美好的存在。</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sweet Quotes -->
-        <section class="section quotes-section">
-            <div class="section-title">每日宠溺</div>
-            <div class="quote-card">
-                <div class="quote-text" id="quoteText">你是我见过最美的风景。</div>
-                <div class="quote-dots" id="quoteDots"></div>
-            </div>
-        </section>
-
-        <!-- Navigation -->
-        <nav class="bottom-nav">
-            <a href="message.html" class="nav-item">
-                <span class="nav-icon">💌</span>
-                <span class="nav-label">留言板</span>
-            </a>
-            <a href="admin.html" class="nav-item">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label">管理</span>
-            </a>
-        </nav>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Made with ♥ by QingYun & YaQing</p>
-            <p class="footer-date">520 Forever</p>
-        </footer>
-    </div>
-
-    <script src="script.js"></script>
+<div id="passwordScreen" class="screen active">
+<div class="hearts-bg" id="passwordHearts"></div>
+<div class="password-container">
+<div class="heart-shape">
+<div class="heart-inner">
+<div class="heart-input-area">
+<p class="heart-title">输入爱的密码</p>
+<input type="password" id="passwordInput" placeholder="请输入密码" autocomplete="off">
+<button id="passwordBtn" class="heart-btn">进入</button>
+<p id="passwordError" class="error-msg"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="mainContent" class="screen">
+<div class="petals-container" id="petalsContainer"></div>
+<div class="gardenia-container" id="gardeniaContainer"></div>
+<header class="header">
+<div class="names-display">
+<span class="name boy-name">Zhu QingYun</span>
+<span class="heart-icon">&hearts;</span>
+<span class="name girl-name">Zhang YaQing</span>
+</div>
+<div class="subtitle">我们的爱情故事</div>
+</header>
+<section class="section love-timer-section">
+<div class="section-title">相爱时长</div>
+<div class="timer-card">
+<div class="timer-display">
+<div class="timer-item"><span class="timer-number" id="days">0</span><span class="timer-label">天</span></div>
+<div class="timer-separator">:</div>
+<div class="timer-item"><span class="timer-number" id="hours">0</span><span class="timer-label">小时</span></div>
+<div class="timer-separator">:</div>
+<div class="timer-item"><span class="timer-number" id="minutes">0</span><span class="timer-label">分钟</span></div>
+<div class="timer-separator">:</div>
+<div class="timer-item"><span class="timer-number" id="seconds">0</span><span class="timer-label">秒</span></div>
+</div>
+<div class="since-date">自 2026年1月25日 起</div>
+</div>
+</section>
+<section class="section easter-egg-section">
+<div class="center-heart-container" id="centerHeart">
+<div class="big-heart">&hearts;</div>
+<p class="heart-hint">点击爱心</p>
+</div>
+<div class="confession-modal" id="confessionModal">
+<div class="confession-content">
+<div class="confession-close" id="confessionClose">&times;</div>
+<p class="confession-text">亲爱的雅清：<br><br>从遇见你的那一刻起，<br>我的世界便有了色彩。<br><br>你是我清晨的第一缕阳光，<br>是我夜晚最亮的星。<br><br>愿与你携手，<br>走过春夏秋冬，<br>看遍世间风景。<br><br>每一天都是520，<br>因为每一天都爱你。<br><br><span class="confession-sign">—— 你的青云</span></p>
+</div>
+</div>
+</section>
+<section class="section birthday-section">
+<div class="section-title">生日专区</div>
+<div class="birthday-cards">
+<div class="birthday-card boy-card">
+<div class="birthday-avatar">👦</div>
+<div class="birthday-name">朱青云</div>
+<div class="birthday-date">2005.07.30</div>
+<div class="birthday-zodiac">狮子座</div>
+<div class="birthday-msg">温柔而坚定的守护者，用沉默的行动诠释最深的爱意，像夏日阳光般温暖而耀眼。</div>
+</div>
+<div class="birthday-card girl-card">
+<div class="birthday-avatar">👧</div>
+<div class="birthday-name">张雅清</div>
+<div class="birthday-date">2008.02.24</div>
+<div class="birthday-zodiac">双鱼座</div>
+<div class="birthday-msg">如春水般温柔细腻，眼里藏着星辰大海，一笑便融化了整个冬天，是世间最美好的存在。</div>
+</div>
+</div>
+</section>
+<section class="section quotes-section">
+<div class="section-title">每日宠溺</div>
+<div class="quote-card">
+<div class="quote-text" id="quoteText">你是我见过最美的风景。</div>
+<div class="quote-dots" id="quoteDots"></div>
+</div>
+</section>
+<nav class="bottom-nav">
+<a href="message.html" class="nav-item"><span class="nav-icon">💌</span><span class="nav-label">留言板</span></a>
+<a href="admin.html" class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">管理</span></a>
+</nav>
+<footer class="footer">
+<p>Made with ♥ by QingYun & YaQing</p>
+<p class="footer-date">520 Forever</p>
+</footer>
+</div>
+<script>
+var CONFIG={loveStartDate:new Date('2026-01-25T00:00:00'),sitePassword:'ZYQzqy02240730',admins:[{username:'云栖清雅',password:'0224',role:'男主人'},{username:'雅韵云悠',password:'0730',role:'女主人'}],quotes:['你是我见过最美的风景。','想把世界上最好的都给你。','今天的风好甜，因为想你了。','你笑起来真好看，像春天的花一样。','余生很长，我只想和你走。','你是我最想留住的幸运。','每天醒来看到你，就是最大的幸福。','你的名字是我见过最短的情诗。','世界那么大，我的眼里只有你。','想和你一起慢慢变老。','你是我所有的心事和欢喜。','遇见你之后，生活变得好甜。','你是我藏在心底的秘密。','喜欢你是一件很幸福的事。','你是我今生最美的相遇。','愿往后余生，冷暖有相知。','你是我温暖的手套，冰冷的啤酒。','我看过很多风景，唯独你最入眼。','你是我的今天，也是我的每一天。','想牵你的手，从心动到白头。']};
+var Storage={get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):(d||null)}catch(e){return d||null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+document.addEventListener('DOMContentLoaded',function(){
+var screen=document.getElementById('passwordScreen');
+if(sessionStorage.getItem('love_auth')==='true'){screen.style.display='none';document.getElementById('mainContent').classList.add('active');initMainPage();return}
+createFloatingHearts();
+var input=document.getElementById('passwordInput'),btn=document.getElementById('passwordBtn'),err=document.getElementById('passwordError');
+btn.addEventListener('click',check);
+input.addEventListener('keypress',function(e){if(e.key==='Enter')check()});
+function check(){var v=input.value.trim();var cp=Storage.get('site_password',CONFIG.sitePassword);if(v===cp){sessionStorage.setItem('love_auth','true');screen.style.transition='opacity 0.5s ease';screen.style.opacity='0';setTimeout(function(){screen.style.display='none';document.getElementById('mainContent').classList.add('active');initMainPage()},500)}else{err.textContent='密码不对哦，再试试~';input.value='';input.style.animation='shake 0.5s ease';setTimeout(function(){input.style.animation=''},500)}}
+});
+function createFloatingHearts(){var c=document.getElementById('passwordHearts');if(!c)return;for(var i=0;i<15;i++){var h=document.createElement('span');h.className='float-heart';h.innerHTML='♥';h.style.left=Math.random()*100+'%';h.style.fontSize=(12+Math.random()*20)+'px';h.style.animationDuration=(6+Math.random()*8)+'s';h.style.animationDelay=Math.random()*10+'s';c.appendChild(h)}}
+function initMainPage(){applySectionVisibility();startLoveTimer();initEasterEgg();initQuotes();createPetals();createGardenias()}
+function applySectionVisibility(){var vis=Storage.get('section_visibility',{timer:true,easterEgg:true,birthday:true,quotes:true});var ss={timer:document.querySelector('.love-timer-section'),easterEgg:document.querySelector('.easter-egg-section'),birthday:document.querySelector('.birthday-section'),quotes:document.querySelector('.quotes-section')};for(var k in ss){if(ss[k])ss[k].style.display=vis[k]===false?'none':''}}
+function startLoveTimer(){function u(){var n=new Date(),d=n-CONFIG.loveStartDate,dy=Math.floor(d/864e5),h=Math.floor(d%864e5/36e5),m=Math.floor(d%36e5/6e4),s=Math.floor(d%6e4/1e3);var de=document.getElementById('days'),he=document.getElementById('hours'),me=document.getElementById('minutes'),se=document.getElementById('seconds');if(de)de.textContent=dy;if(he)he.textContent=('0'+h).slice(-2);if(me)me.textContent=('0'+m).slice(-2);if(se)se.textContent=('0'+s).slice(-2)}u();setInterval(u,1000)}
+function initEasterEgg(){var h=document.getElementById('centerHeart'),m=document.getElementById('confessionModal'),c=document.getElementById('confessionClose');if(!h||!m)return;h.addEventListener('click',function(){m.classList.add('show')});c.addEventListener('click',function(){m.classList.remove('show')});m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show')})}
+function initQuotes(){var t=document.getElementById('quoteText'),d=document.getElementById('quoteDots');if(!t||!d)return;var ci=0,qs=Storage.get('custom_quotes',CONFIG.quotes),dc=Math.min(qs.length,8);for(var i=0;i<dc;i++){var dot=document.createElement('span');dot.className='quote-dot'+(i===0?' active':'');d.appendChild(dot)}var dots=d.querySelectorAll('.quote-dot');function sq(idx){t.classList.add('fade');setTimeout(function(){t.textContent=qs[idx%qs.length];t.classList.remove('fade')},300);dots.forEach(function(dd,j){dd.classList.toggle('active',j===idx%dc)})}setInterval(function(){ci++;sq(ci)},4000)}
+function createPetals(){var c=document.getElementById('petalsContainer');if(!c)return;for(var i=0;i<12;i++){var p=document.createElement('div');p.className='petal';p.style.left=Math.random()*100+'%';p.style.width=(8+Math.random()*10)+'px';p.style.height=(8+Math.random()*10)+'px';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*15+'s';p.style.opacity=0.3+Math.random()*0.4;var hue=Math.random()>0.5?'340, 80%, 85%':'270, 50%, 85%';p.style.background='radial-gradient(ellipse, hsla('+hue+', 0.8) 0%, transparent 70%)';c.appendChild(p)}}
+function createGardenias(){var c=document.getElementById('gardeniaContainer');if(!c)return;var gs=function(id){return'<svg width="60" height="60" viewBox="0 0 60 60" fill="none"><g opacity="0.8"><ellipse cx="30" cy="20" rx="8" ry="15" fill="url(#gGrad'+id+')" transform="rotate(0 30 30)"/><ellipse cx="30" cy="20" rx="8" ry="15" fill="url(#gGrad'+id+')" transform="rotate(72 30 30)"/><ellipse cx="30" cy="20" rx="8" ry="15" fill="url(#gGrad'+id+')" transform="rotate(144 30 30)"/><ellipse cx="30" cy="20" rx="8" ry="15" fill="url(#gGrad'+id+')" transform="rotate(216 30 30)"/><ellipse cx="30" cy="20" rx="8" ry="15" fill="url(#gGrad'+id+')" transform="rotate(288 30 30)"/><circle cx="30" cy="30" r="5" fill="#E8D0F0"/></g><defs><radialGradient id="gGrad'+id+'"><stop offset="0%" stop-color="#D8B4FE"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0.6"/></radialGradient></defs></svg>'};for(var i=0;i<6;i++){var g=document.createElement('div');g.className='gardenia';g.innerHTML=gs(i);g.style.left=(10+Math.random()*80)+'%';g.style.top=(10+Math.random()*80)+'%';g.style.transform='scale('+(0.5+Math.random()*0.8)+')';g.style.animationDuration=(6+Math.random()*8)+'s';g.style.animationDelay=Math.random()*5+'s';c.appendChild(g)}}
+</script>
 </body>
 </html>
